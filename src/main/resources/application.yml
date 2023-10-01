@@ -1,3 +1,8 @@
 spring:
   profiles:
-    default: local
+    group:
+      local:
+        - local-mysql
+        - local-security
+        - local-redis
+    active: local
