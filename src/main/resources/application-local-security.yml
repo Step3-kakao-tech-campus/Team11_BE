@@ -1,0 +1,9 @@
+security:
+  jwt:
+    token:
+      access:
+        secretKey: asccesssecretkeygolajumasecrekey
+        validTime: 1800000
+      refresh:
+        secretKey: refreshsecretkeygolajumasecrekey
+        validTime: 604800000
