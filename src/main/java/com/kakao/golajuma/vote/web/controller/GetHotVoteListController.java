@@ -10,7 +10,6 @@ import com.kakao.golajuma.vote.web.dto.response.GetVoteListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -20,8 +19,8 @@ public class GetHotVoteListController {
 	// 투표 생성
 	@GetMapping("/votes/hot")
 	public ApiResponse<ApiResponseBody.SuccessBody<GetVoteListResponse.MainAndFinishPage>>
-			readHotVotes(@Login Long userId, @RequestParam(defaultValue = "continue") String active) {
-		GetVoteListResponse.MainAndFinishPage responseDto = readHotVotesService.read(userId, active);
+			readHotVotes(@Login Long userId) {
+		GetVoteListResponse.MainAndFinishPage responseDto = readHotVotesService.read(userId);
 		return ApiResponseGenerator.success(responseDto, HttpStatus.OK, MessageCode.GET);
 	}
 }

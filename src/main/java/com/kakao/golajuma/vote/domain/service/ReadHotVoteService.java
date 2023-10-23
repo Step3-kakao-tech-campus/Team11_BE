@@ -1,5 +1,7 @@
 package com.kakao.golajuma.vote.domain.service;
 
+import com.kakao.golajuma.vote.domain.exception.RequestParamException;
+import com.kakao.golajuma.vote.infra.entity.Active;
 import com.kakao.golajuma.vote.infra.entity.OptionEntity;
 import com.kakao.golajuma.vote.infra.entity.VoteEntity;
 import com.kakao.golajuma.vote.infra.repository.HotVoteRepository;
@@ -23,25 +25,16 @@ public class ReadHotVoteService {
 	private final HotVoteRepository hotVoteRepository;
 	private final GetVoteService getVoteService;
 
-	public GetVoteListResponse.MainAndFinishPage read(long userId, String active) {
+	public GetVoteListResponse.MainAndFinishPage read(long userId) {
 
 		// 1. vote list 를 가져온다
 		Slice<VoteEntity> voteList = findByRepository();
 		System.out.println(voteList);
 		List<VoteDto> votes = new ArrayList<>();
 
-		// 진행중인 투표(on) or 완료된 투표 요청 판단
-		boolean on;
-
 		// 2. 각 vote 별로 vote option 을 찾는다 - slice 방식
 		for (VoteEntity vote : voteList) {
-			LocalDateTime now = LocalDateTime.now();
-			if (vote.getVoteEndDate().isBefore(now)) {
-				on = false;
-			} else {
-				on = true;
-			}
-			VoteDto voteDto = getVoteService.getVote(vote, userId, on);
+			VoteDto voteDto = getVoteService.getVote(vote, userId);
 			votes.add(voteDto);
 		}
 
@@ -63,6 +56,17 @@ public class ReadHotVoteService {
 			choiceList.add(true); // dummy data
 		}
 		return choiceList;
+	}
+
+	public boolean checkActive(VoteEntity vote) {
+		if (vote.checkActive() == Active.CONTINUE) {
+			return true;
+		}
+		if (vote.checkActive() == Active.COMPLETE) {
+			return false;
+		}
+
+		throw new RequestParamException("잘못된 요청입니다.(active)");
 	}
 
 	public Slice<VoteEntity> findByRepository() {

@@ -8,8 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +22,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @SuperBuilder(toBuilder = true)
-@Entity(name = AuthInfoEntity.ENTITY_PREFIX + "_entity")
+@Entity
+@Table(name = AuthInfoEntity.ENTITY_PREFIX)
 public class AuthInfoEntity extends BaseEntity {
 
 	public static final String ENTITY_PREFIX = "auth_info";
@@ -41,7 +41,6 @@ public class AuthInfoEntity extends BaseEntity {
 	@Column(name = ENTITY_PREFIX + "_token", nullable = false)
 	private String token;
 
-	@OneToOne
-	@JoinColumn(name = "user_id")
-	private UserEntity userEntity;
+	@Column(name = "user_id", nullable = false)
+	private Long userId;
 }

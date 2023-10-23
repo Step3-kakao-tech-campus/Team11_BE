@@ -3,6 +3,8 @@ spring:
     group:
       local:
         - local-mysql
-        - local-security
-        - local-redis
+        - local-token
+      dev:
+        - dev-mysql
+        - dev-token
     active: local

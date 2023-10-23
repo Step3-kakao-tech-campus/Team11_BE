@@ -3,7 +3,7 @@ package com.kakao.golajuma.vote.web.dto.request;
 import com.kakao.golajuma.common.marker.AbstractRequestDto;
 import com.kakao.golajuma.vote.util.OptionCheck;
 import java.util.List;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 @Getter
 public class CreateVoteRequest implements AbstractRequestDto {
-	@NotNull(message = "투표 제목은 필수입니다.")
+	@NotBlank(message = "투표 제목은 필수입니다.")
 	private String title;
 
 	private String content;

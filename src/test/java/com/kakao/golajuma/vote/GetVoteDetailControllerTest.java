@@ -70,11 +70,11 @@ public class GetVoteDetailControllerTest {
 				.andExpect(jsonPath("$.data.vote.content").hasJsonPath())
 				.andExpect(jsonPath("$.data.vote.options").isArray())
 				.andExpect(jsonPath("$.data.vote.options[0].id").hasJsonPath())
-				.andExpect(jsonPath("$.data.vote.options[0].name").hasJsonPath())
+				.andExpect(jsonPath("$.data.vote.options[0].optionName").hasJsonPath())
 				.andExpect(jsonPath("$.data.vote.options[0].image").hasJsonPath())
 				.andExpect(jsonPath("$.data.vote.options[0].choice").hasJsonPath())
-				.andExpect(jsonPath("$.data.vote.options[0].count").hasJsonPath())
-				.andExpect(jsonPath("$.data.vote.options[0].ratio").hasJsonPath())
+				.andExpect(jsonPath("$.data.vote.options[0].optionCount").hasJsonPath())
+				.andExpect(jsonPath("$.data.vote.options[0].optionRatio").hasJsonPath())
 				.andExpect(jsonPath("$.message").hasJsonPath());
 	}
 }

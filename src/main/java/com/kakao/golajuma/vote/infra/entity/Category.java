@@ -5,8 +5,13 @@ import java.util.Arrays;
 
 public enum Category {
 	TOTAL("total"),
-	CLOTHES("clothes"),
-	FOOD("food");
+	BUY("buy"),
+	WHERE("where"),
+	WHAT("what"),
+	FOOD("food"),
+	MOVIE("movie"),
+	LISTEN("listen"),
+	ETC("etc");
 
 	private final String category;
 
@@ -23,5 +28,9 @@ public enum Category {
 				.filter(Category -> Category.getCategory().equals(category))
 				.findAny()
 				.orElseThrow(() -> new CategoryException("해당 카테고리는 존재하지 않습니다."));
+	}
+
+	public static boolean isTotalRequest(String category) {
+		return findCategory(category) == Category.TOTAL;
 	}
 }

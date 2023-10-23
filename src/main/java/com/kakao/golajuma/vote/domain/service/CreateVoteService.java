@@ -10,22 +10,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class CreateVoteService {
 
-	private final VoteRepository voteJPARepository;
-	private final OptionRepository optionJPARepository;
+	private final VoteRepository voteRepository;
+	private final OptionRepository optionRepository;
 
 	@Transactional
-	public CreateVoteResponse createVote(CreateVoteRequest request, long userId) {
+	public CreateVoteResponse createVote(CreateVoteRequest request, Long userId) {
 		VoteEntity vote = VoteEntity.createEntity(request, userId);
-		voteJPARepository.save(vote);
+		voteRepository.save(vote);
 		long voteId = vote.getId();
 		for (CreateVoteRequest.OptionDTO optionDto : request.getOptions()) {
 			OptionEntity option = OptionEntity.createEntity(optionDto, voteId);
-			optionJPARepository.save(option);
+			optionRepository.save(option);
 		}
 		return new CreateVoteResponse(voteId);
 	}

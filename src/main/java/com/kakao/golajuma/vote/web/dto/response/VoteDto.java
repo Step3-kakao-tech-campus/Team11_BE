@@ -2,6 +2,7 @@ package com.kakao.golajuma.vote.web.dto.response;
 
 import com.kakao.golajuma.auth.infra.entity.UserEntity;
 import com.kakao.golajuma.common.marker.AbstractResponseDto;
+import com.kakao.golajuma.vote.infra.entity.Active;
 import com.kakao.golajuma.vote.infra.entity.VoteEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,13 +47,14 @@ public class VoteDto implements AbstractResponseDto {
 	public static VoteDto makeDto(
 			VoteEntity vote,
 			UserEntity username,
-			String active,
+			Active active,
 			boolean isOwner,
 			boolean participate,
 			String category,
 			List<? super OptionDto> options) {
 		VoteDto voteDto =
-				new VoteDto(vote, username.getNickname(), active, isOwner, participate, category);
+				new VoteDto(
+						vote, username.getNickname(), active.getActive(), isOwner, participate, category);
 
 		voteDto.addOption(options);
 
@@ -61,8 +63,8 @@ public class VoteDto implements AbstractResponseDto {
 
 	public void addOption(List<? super OptionDto> options) {
 		for (Object option : options) {
-			if (option instanceof OptionDto) this.options.add((OptionDto) option);
 			if (option instanceof CountOptionDto) this.options.add((CountOptionDto) option);
+			else this.options.add((OptionDto) option);
 		}
 	}
 }

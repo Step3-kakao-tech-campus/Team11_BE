@@ -16,4 +16,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
 	// 투표에 따른 댓글 리스트 가져오기
 	@Query("select c from CommentEntity c where c.voteId = :voteId and c.deleted = false")
 	List<CommentEntity> findByVoteId(@Param("voteId") long voteId);
+
+	@Query("select c from CommentEntity c where c.userId = :userId and c.deleted = false")
+	List<CommentEntity> findByUserId(@Param("userId") long userId);
 }

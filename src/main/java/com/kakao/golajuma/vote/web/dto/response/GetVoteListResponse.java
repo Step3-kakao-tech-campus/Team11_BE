@@ -2,7 +2,6 @@ package com.kakao.golajuma.vote.web.dto.response;
 
 import com.kakao.golajuma.common.marker.AbstractResponseDto;
 import com.kakao.golajuma.vote.infra.entity.VoteEntity;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
@@ -41,14 +40,7 @@ public class GetVoteListResponse implements AbstractResponseDto {
 		}
 
 		public VoteListDto voteToDto(VoteEntity vote) {
-			LocalDateTime now = LocalDateTime.now();
-			String active;
-			if (vote.getVoteEndDate().isBefore(now)) {
-				active = "finish";
-			} else {
-				active = "continue";
-			}
-
+			String active = vote.checkActive().getActive();
 			return VoteListDto.builder()
 					.id(vote.getId())
 					.active(active)

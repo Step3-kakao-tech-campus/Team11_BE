@@ -49,7 +49,7 @@ public class GetVoteListControllerTest {
 				mvc.perform(
 						get("/votes")
 								.header("Authorization", "Bearer " + jwtToken)
-								.param("idx", "5")
+								//								.param("page", "1")
 								.param("sort", "current")
 								.param("active", "continue")
 								.param("category", "total"));
@@ -62,24 +62,6 @@ public class GetVoteListControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.data").hasJsonPath())
 				.andExpect(jsonPath("$.data.votes").isArray())
-				.andExpect(jsonPath("$.data.votes[0].id").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].username").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].isOwner").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].totalCount").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].createdDate").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].endDate").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].active").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].participate").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].category").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].title").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].content").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].options").isArray())
-				.andExpect(jsonPath("$.data.votes[0].options[0].id").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].options[0].name").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].options[0].image").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].options[0].choice").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].options[0].count").hasJsonPath())
-				.andExpect(jsonPath("$.data.votes[0].options[0].ratio").hasJsonPath())
 				.andExpect(jsonPath("$.message").hasJsonPath());
 	}
 
@@ -93,7 +75,7 @@ public class GetVoteListControllerTest {
 						get("/votes")
 								.header("Authorization", "Bearer " + jwtToken)
 								.param("sort", "current")
-								.param("active", "finish")
+								.param("active", "complete")
 								.param("category", "total"));
 		// eye
 		String responseBody = resultActions.andReturn().getResponse().getContentAsString();

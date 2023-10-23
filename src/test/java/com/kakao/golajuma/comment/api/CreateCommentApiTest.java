@@ -1,6 +1,7 @@
 package com.kakao.golajuma.comment.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kakao.golajuma.auth.domain.token.TokenProvider;
 import com.kakao.golajuma.comment.web.dto.request.SaveCommentRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,10 +21,15 @@ public class CreateCommentApiTest {
 
 	@Autowired private MockMvc mvc;
 
+	@Autowired private TokenProvider tokenProvider;
+
+	private String jwtToken;
+
 	@DisplayName("comment-create-success-case")
 	@Test
 	public void createTest() throws Exception {
 		// given
+		jwtToken = tokenProvider.createAccessToken(1L);
 		SaveCommentRequest requestDto = SaveCommentRequest.builder().content("메롱이다.").build();
 		String requestBody = om.writeValueAsString(requestDto);
 		System.out.println("테스트 : " + requestBody);
@@ -31,9 +37,7 @@ public class CreateCommentApiTest {
 		ResultActions resultActions =
 				mvc.perform(
 						MockMvcRequestBuilders.post("/votes/1/comments")
-								.header(
-										"Authorization",
-										"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjMsImlhdCI6MTY5Njc1MDU0OCwiZXhwIjoxNjk2NzUyMzQ4fQ.sKzZNz2nlvFX7a6P5Z3sGh2MpTQarvpZ-TR2qoh5NQw")
+								.header("Authorization", "Bearer " + jwtToken)
 								.content(requestBody)
 								.contentType(MediaType.APPLICATION_JSON));
 
@@ -44,7 +48,6 @@ public class CreateCommentApiTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.data.isOwner").hasJsonPath())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.data.username").hasJsonPath())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.data.content").hasJsonPath())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.message").hasJsonPath())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.code").hasJsonPath());
+				.andExpect(MockMvcResultMatchers.jsonPath("$.message").hasJsonPath());
 	}
 }

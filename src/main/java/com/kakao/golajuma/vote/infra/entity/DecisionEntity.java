@@ -20,14 +20,14 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder(toBuilder = true)
 @Entity
-@Table(name = DecisionEntity.ENTITY_PREFIX + "_tb")
+@Table(name = DecisionEntity.ENTITY_PREFIX)
 public class DecisionEntity extends BaseEntity {
 
 	public static final String ENTITY_PREFIX = "decision";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = ENTITY_PREFIX + "_id")
+	@Column(name = ENTITY_PREFIX + "_id", nullable = false)
 	private Long id;
 
 	@Column(name = ENTITY_PREFIX + "_option_id", nullable = false)

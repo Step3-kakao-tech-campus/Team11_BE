@@ -8,26 +8,27 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class CountOptionDto extends OptionDto {
 	private boolean choice;
-	private long count;
-	private int ratio;
+	private long optionCount;
+	private int optionRatio;
 
 	public CountOptionDto(long id, String name, String image, boolean choice, long count, int ratio) {
 		super(id, name, image);
 		this.choice = choice;
-		this.count = count;
-		this.ratio = ratio;
+		this.optionCount = count;
+		this.optionRatio = ratio;
 	}
 
 	public static CountOptionDto makeCountOptionDto(
 			OptionEntity option, boolean choice, long totalCount) {
 		if (totalCount == 0) totalCount = 1;
+		int ratio = Math.round(option.getOptionCount() * 100 / totalCount);
 		return CountOptionDto.builder()
 				.id(option.getId())
-				.name(option.getOptionName())
+				.optionName(option.getOptionName())
 				.image(option.getOptionImage())
 				.choice(choice)
-				.count(option.getOptionCount())
-				.ratio(Math.round(option.getOptionCount() / totalCount))
+				.optionCount(option.getOptionCount())
+				.optionRatio(ratio)
 				.build();
 	}
 }

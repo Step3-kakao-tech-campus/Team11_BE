@@ -2,11 +2,8 @@ package com.kakao.golajuma.auth.domain.service;
 
 import com.kakao.golajuma.auth.domain.exception.NotFoundException;
 import com.kakao.golajuma.auth.domain.helper.Encoder;
-import com.kakao.golajuma.auth.domain.token.TokenProvider;
-import com.kakao.golajuma.auth.domain.token.TokenResolver;
 import com.kakao.golajuma.auth.infra.entity.UserEntity;
 import com.kakao.golajuma.auth.infra.repository.UserRepository;
-import com.kakao.golajuma.auth.web.dto.converter.TokenConverter;
 import com.kakao.golajuma.auth.web.dto.request.LoginUserRequest;
 import com.kakao.golajuma.auth.web.dto.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class LoginUserService {
 
-	private final TokenProvider tokenProvider;
 	private final UserRepository userRepository;
-	private final TokenConverter tokenConverter;
-	private final TokenResolver tokenResolver;
-	private final TokenService tokenService;
 	private final Encoder encoder;
+	private final CreateTokenService createTokenService;
 
 	@Transactional
 	public TokenResponse execute(final LoginUserRequest request) {
@@ -34,13 +28,7 @@ public class LoginUserService {
 
 		validPassword(request.getPassword(), userEntity);
 
-		String accessToken = tokenProvider.createAccessToken(userEntity.getId());
-		String refreshToken = tokenProvider.createRefreshToken(userEntity.getId());
-
-		tokenService.execute(userEntity.getId(), refreshToken);
-
-		return tokenConverter.from(
-				accessToken, tokenResolver.getExpiredDate(accessToken), refreshToken);
+		return createTokenService.execute(userEntity.getId());
 	}
 
 	private void validPassword(final String requestPassword, final UserEntity userEntity) {

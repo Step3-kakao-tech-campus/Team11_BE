@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @SuperBuilder(toBuilder = true)
-@Entity(name = UserEntity.ENTITY_PREFIX + "_entity")
+@Entity
+@Table(name = UserEntity.ENTITY_PREFIX)
 public class UserEntity extends BaseEntity {
 	public static final String ENTITY_PREFIX = "user";
 

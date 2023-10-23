@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: local-security
+      on-profile: local-token
 
 security:
   jwt:
