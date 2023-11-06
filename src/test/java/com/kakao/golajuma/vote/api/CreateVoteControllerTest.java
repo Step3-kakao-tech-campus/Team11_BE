@@ -1,4 +1,4 @@
-package com.kakao.golajuma.vote;
+package com.kakao.golajuma.vote.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kakao.golajuma.auth.domain.token.TokenProvider;
 import com.kakao.golajuma.auth.infra.entity.UserEntity;
 import com.kakao.golajuma.auth.infra.repository.UserRepository;
+import com.kakao.golajuma.vote.ImageDto;
 import com.kakao.golajuma.vote.web.dto.request.CreateVoteRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +46,48 @@ public class CreateVoteControllerTest {
 		userRepository.save(user);
 	}
 
-	@DisplayName("투표 생성 정상 작동")
+	@DisplayName("투표 생성 정상 작동 - 이미지 포함")
 	@Test
-	public void createVoteTest() throws Exception {
-		List<CreateVoteRequest.OptionDTO> options = new ArrayList<>();
-		CreateVoteRequest.OptionDTO option1 = new CreateVoteRequest.OptionDTO("가라", "image1");
-		CreateVoteRequest.OptionDTO option2 = new CreateVoteRequest.OptionDTO("가지마라", "image2");
+	public void createVoteTestWithImage() throws Exception {
+		List<CreateVoteRequest.OptionDto> options = new ArrayList<>();
+		ImageDto imageDto = new ImageDto();
+		String base64 = imageDto.getImage();
+		CreateVoteRequest.OptionDto option1 = new CreateVoteRequest.OptionDto("가라", base64);
+		CreateVoteRequest.OptionDto option2 = new CreateVoteRequest.OptionDto("가지마라");
+		options.add(option1);
+		options.add(option2);
+
+		CreateVoteRequest request = new CreateVoteRequest("군대 가야할까요?", "total", "...", 60, options);
+
+		String requestBody = om.writeValueAsString(request);
+		System.out.println("테스트 : " + requestBody);
+
+		// when
+		ResultActions resultActions =
+				mvc.perform(
+						post("/votes")
+								.header("Authorization", "Bearer " + jwtToken)
+								.content(requestBody)
+								.contentType(MediaType.APPLICATION_JSON_VALUE));
+
+		// eye
+		String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+		System.out.println("테스트 : " + responseBody);
+
+		// then
+		resultActions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.data").hasJsonPath())
+				.andExpect(jsonPath("$.data.id").hasJsonPath())
+				.andExpect(jsonPath("$.message").hasJsonPath());
+	}
+
+	@DisplayName("투표 생성 정상 작동 - 이미지 미포함")
+	@Test
+	public void createVoteTestWithoutImage() throws Exception {
+		List<CreateVoteRequest.OptionDto> options = new ArrayList<>();
+		CreateVoteRequest.OptionDto option1 = new CreateVoteRequest.OptionDto("가라");
+		CreateVoteRequest.OptionDto option2 = new CreateVoteRequest.OptionDto("가지마라");
 		options.add(option1);
 		options.add(option2);
 
@@ -81,10 +118,10 @@ public class CreateVoteControllerTest {
 
 	@DisplayName("투표 생성 시 제목 입력 안했을 경우")
 	@Test
-	public void createVoteTest_error1() throws Exception {
-		List<CreateVoteRequest.OptionDTO> options = new ArrayList<>();
-		CreateVoteRequest.OptionDTO option1 = new CreateVoteRequest.OptionDTO("가라", "image1");
-		CreateVoteRequest.OptionDTO option2 = new CreateVoteRequest.OptionDTO("가지마라", "image2");
+	public void createVoteTest_NoTitle() throws Exception {
+		List<CreateVoteRequest.OptionDto> options = new ArrayList<>();
+		CreateVoteRequest.OptionDto option1 = new CreateVoteRequest.OptionDto("가라");
+		CreateVoteRequest.OptionDto option2 = new CreateVoteRequest.OptionDto("가지마라");
 		options.add(option1);
 		options.add(option2);
 
@@ -113,10 +150,10 @@ public class CreateVoteControllerTest {
 
 	@DisplayName("투표 생성 시 옵션명이 없는 경우")
 	@Test
-	public void createVoteTest_error2() throws Exception {
-		List<CreateVoteRequest.OptionDTO> options = new ArrayList<>();
-		CreateVoteRequest.OptionDTO option1 = new CreateVoteRequest.OptionDTO(null, "image1");
-		CreateVoteRequest.OptionDTO option2 = new CreateVoteRequest.OptionDTO("가지마라", "image2");
+	public void createVoteTest_NoOptionName() throws Exception {
+		List<CreateVoteRequest.OptionDto> options = new ArrayList<>();
+		CreateVoteRequest.OptionDto option1 = new CreateVoteRequest.OptionDto(null);
+		CreateVoteRequest.OptionDto option2 = new CreateVoteRequest.OptionDto("가지마라");
 		options.add(option1);
 		options.add(option2);
 
@@ -144,15 +181,15 @@ public class CreateVoteControllerTest {
 
 	@DisplayName("투표 생성 시 옵션이 6개 초과인 경우")
 	@Test
-	public void createVoteTest_error3() throws Exception {
-		List<CreateVoteRequest.OptionDTO> options = new ArrayList<>();
-		CreateVoteRequest.OptionDTO option1 = new CreateVoteRequest.OptionDTO("가라", "image1");
-		CreateVoteRequest.OptionDTO option2 = new CreateVoteRequest.OptionDTO("가지마라", "image2");
-		CreateVoteRequest.OptionDTO option3 = new CreateVoteRequest.OptionDTO("가지마라", "image2");
-		CreateVoteRequest.OptionDTO option4 = new CreateVoteRequest.OptionDTO("가지마라", "image2");
-		CreateVoteRequest.OptionDTO option5 = new CreateVoteRequest.OptionDTO("가지마라", "image2");
-		CreateVoteRequest.OptionDTO option6 = new CreateVoteRequest.OptionDTO("가지마라", "image2");
-		CreateVoteRequest.OptionDTO option7 = new CreateVoteRequest.OptionDTO("가지마라", "image2");
+	public void createVoteTest_ExceedOptionNum() throws Exception {
+		List<CreateVoteRequest.OptionDto> options = new ArrayList<>();
+		CreateVoteRequest.OptionDto option1 = new CreateVoteRequest.OptionDto("가라");
+		CreateVoteRequest.OptionDto option2 = new CreateVoteRequest.OptionDto("가지마라");
+		CreateVoteRequest.OptionDto option3 = new CreateVoteRequest.OptionDto("가지마라");
+		CreateVoteRequest.OptionDto option4 = new CreateVoteRequest.OptionDto("가지마라");
+		CreateVoteRequest.OptionDto option5 = new CreateVoteRequest.OptionDto("가지마라");
+		CreateVoteRequest.OptionDto option6 = new CreateVoteRequest.OptionDto("가지마라");
+		CreateVoteRequest.OptionDto option7 = new CreateVoteRequest.OptionDto("가지마라");
 		options.add(option1);
 		options.add(option2);
 		options.add(option3);
@@ -185,10 +222,10 @@ public class CreateVoteControllerTest {
 
 	@DisplayName("투표 생성 시 존재하지 않는 카테고리인 경우")
 	@Test
-	public void createVoteTest_error4() throws Exception {
-		List<CreateVoteRequest.OptionDTO> options = new ArrayList<>();
-		CreateVoteRequest.OptionDTO option1 = new CreateVoteRequest.OptionDTO("가라", "image1");
-		CreateVoteRequest.OptionDTO option2 = new CreateVoteRequest.OptionDTO("가지마라", "image2");
+	public void createVoteTest_CategoryException() throws Exception {
+		List<CreateVoteRequest.OptionDto> options = new ArrayList<>();
+		CreateVoteRequest.OptionDto option1 = new CreateVoteRequest.OptionDto("가라");
+		CreateVoteRequest.OptionDto option2 = new CreateVoteRequest.OptionDto("가지마라");
 		options.add(option1);
 		options.add(option2);
 

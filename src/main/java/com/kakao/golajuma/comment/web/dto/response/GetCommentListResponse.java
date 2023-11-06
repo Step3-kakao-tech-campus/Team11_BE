@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class ReadCommentListResponse implements AbstractResponseDto {
-	private List<ReadCommentDto> comments;
+public class GetCommentListResponse implements AbstractResponseDto {
+	private List<CommentDto> comments;
 	private int commentCount;
 }

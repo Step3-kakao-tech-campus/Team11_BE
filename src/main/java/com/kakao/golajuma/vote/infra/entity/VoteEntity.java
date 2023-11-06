@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 
 @ToString
 @SuperBuilder
@@ -26,7 +27,8 @@ public class VoteEntity extends BaseEntity {
 	private Long userId;
 
 	@Column(name = ENTITY_PREFIX + "_total_count", nullable = false)
-	private long voteTotalCount;
+	@ColumnDefault("0")
+	private int voteTotalCount;
 
 	@Column(name = ENTITY_PREFIX + "_title", length = 256, nullable = false)
 	private String voteTitle;
@@ -59,11 +61,10 @@ public class VoteEntity extends BaseEntity {
 		return false;
 	}
 
-	public static VoteEntity createEntity(CreateVoteRequest request, long userId) {
+	public static VoteEntity createEntity(CreateVoteRequest request, Long userId) {
 		VoteEntity vote =
 				VoteEntity.builder()
 						.userId(userId)
-						.voteTotalCount(0)
 						.category(Category.findCategory(request.getCategory()))
 						.voteTitle(request.getTitle())
 						.voteContent(request.getContent())
@@ -73,7 +74,7 @@ public class VoteEntity extends BaseEntity {
 		return vote;
 	}
 
-	public boolean isOwner(long userId) {
+	public boolean isOwner(Long userId) {
 		return userId == this.getUserId();
 	}
 

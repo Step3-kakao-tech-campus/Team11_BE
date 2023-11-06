@@ -1,6 +1,4 @@
-package com.kakao.golajuma.vote;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+package com.kakao.golajuma.auth.api;
 
 import com.kakao.golajuma.auth.domain.token.TokenProvider;
 import com.kakao.golajuma.auth.infra.repository.UserRepository;
@@ -13,10 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class GetHotVoteListTest {
+public class ReadUserProfileControllerTest {
 
 	@Autowired private MockMvc mvc;
 
@@ -31,17 +30,23 @@ public class GetHotVoteListTest {
 		jwtToken = tokenProvider.createAccessToken(1L);
 	}
 
-	@DisplayName("인기 투표 불러오기 정상 작동")
+	@DisplayName("유저 프로필 불러오기 성공")
 	@Test
-	public void GetHotVoteListTest() throws Exception {
-		System.out.println(jwtToken);
+	public void success_read_profile_test() throws Exception {
 		// when
 		ResultActions resultActions =
 				mvc.perform(
-						MockMvcRequestBuilders.get("/votes/hot").header("Authorization", "Bearer " + jwtToken));
-
-		resultActions.andExpect(status().is2xxSuccessful());
+						MockMvcRequestBuilders.get("/users/profile")
+								.header("Authorization", "Bearer " + jwtToken));
 		String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-		System.out.println("테스트 : " + responseBody);
+
+		resultActions
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.data.nickName").hasJsonPath())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.data.email").hasJsonPath())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.data.image").hasJsonPath())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.data.participateVoteCount").hasJsonPath())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.data.createVoteCount").hasJsonPath());
 	}
 }

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CloseVoteService {
 	private final VoteRepository voteRepository;
 
-	public void closeVote(long voteId, Long userId) {
+	public void closeVote(Long voteId, Long userId) {
 		VoteEntity vote =
 				voteRepository.findById(voteId).orElseThrow(() -> new NullException("해당 투표가 존재하지 않습니다."));
 		// 작성자가 아닌 경우 예외

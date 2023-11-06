@@ -11,10 +11,10 @@ import lombok.Getter;
 
 @Getter
 public class VoteDto implements AbstractResponseDto {
-	private long id;
+	private Long id;
 	private String username;
 	private Boolean isOwner;
-	private long totalCount;
+	private int totalCount;
 	private LocalDateTime createdDate;
 	private LocalDateTime endDate;
 	private String active;

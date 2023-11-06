@@ -7,14 +7,14 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class OptionValidator
-		implements ConstraintValidator<OptionCheck, List<CreateVoteRequest.OptionDTO>> {
+		implements ConstraintValidator<OptionCheck, List<CreateVoteRequest.OptionDto>> {
 
 	private static final int MIN_NUM = 2;
 	private static final int MAX_NUM = 6;
 
 	@Override
 	public boolean isValid(
-			List<CreateVoteRequest.OptionDTO> value, ConstraintValidatorContext context) {
+			List<CreateVoteRequest.OptionDto> value, ConstraintValidatorContext context) {
 		Objects.requireNonNull(value);
 		if (isNullOptionName(value)) {
 			addConstraintViolation(context, "옵션명은 필수입니다.");
@@ -28,20 +28,20 @@ public class OptionValidator
 		return true;
 	}
 
-	public boolean isNullOptionName(List<CreateVoteRequest.OptionDTO> value) {
+	public boolean isNullOptionName(List<CreateVoteRequest.OptionDto> value) {
 		return value.stream().anyMatch(this::isNull);
 	}
 
-	public boolean isNull(CreateVoteRequest.OptionDTO value) {
+	public boolean isNull(CreateVoteRequest.OptionDto value) {
 		return value.getName() == null;
 	}
 
-	public boolean underMinNum(List<CreateVoteRequest.OptionDTO> value) {
+	public boolean underMinNum(List<CreateVoteRequest.OptionDto> value) {
 		int size = value.size();
 		return size < MIN_NUM;
 	}
 
-	private boolean overMaxNum(List<CreateVoteRequest.OptionDTO> value) {
+	private boolean overMaxNum(List<CreateVoteRequest.OptionDto> value) {
 		int size = value.size();
 		return size > MAX_NUM;
 	}

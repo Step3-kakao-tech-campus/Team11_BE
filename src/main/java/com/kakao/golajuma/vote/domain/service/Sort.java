@@ -24,7 +24,7 @@ public enum Sort {
 				.orElseThrow(() -> new SortException("잘못된 정렬 방식입니다."));
 	}
 
-	public static boolean isCurrentRequest(String sort) {
-		return findSort(sort) == Sort.CURRENT;
+	public static boolean isCurrentRequest(Sort sort) {
+		return sort == Sort.CURRENT;
 	}
 }

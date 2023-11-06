@@ -1,6 +1,7 @@
 package com.kakao.golajuma.comment.api;
 
 import com.kakao.golajuma.auth.domain.token.TokenProvider;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,22 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class ReadCommentApiTest {
+public class GetCommentListApiTest {
 
 	@Autowired private MockMvc mvc;
 	@Autowired private TokenProvider tokenProvider;
 
 	private String jwtToken;
 
-	@DisplayName("comment-read-success-case")
-	@Test
-	public void readTest() throws Exception {
+	@BeforeEach
+	void setUp() {
 		// given
 		jwtToken = tokenProvider.createAccessToken(1L);
+	}
+
+	@DisplayName("유저는 투표에 따른 댓글 리스트를 확인할 수 있다.")
+	@Test
+	public void get_comment_list_success_test() throws Exception {
 		// when
 		ResultActions resultActions =
 				mvc.perform(

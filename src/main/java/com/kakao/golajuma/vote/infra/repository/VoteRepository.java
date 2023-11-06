@@ -68,7 +68,6 @@ public interface VoteRepository extends JpaRepository<VoteEntity, Integer> {
 			"select v from VoteEntity v"
 					+ " where v.deleted = false"
 					+ " and v.voteEndDate < :now"
-					+ " and v.category = :category"
 					+ " ORDER BY v.voteTotalCount desc ")
 	Slice<VoteEntity> findAllFinishVotesOrderByVoteTotalCount(
 			@Param("now") LocalDateTime now, Pageable pageable);
@@ -84,9 +83,9 @@ public interface VoteRepository extends JpaRepository<VoteEntity, Integer> {
 
 	@Query(
 			"select v from VoteEntity v where v.deleted = false and v.userId = :userId order by v.createdDate desc ")
-	List<VoteEntity> findAllByUserId(@Param("userId") long userId);
+	List<VoteEntity> findAllByUserId(@Param("userId") Long userId);
 
-	Optional<VoteEntity> findById(long id);
+	Optional<VoteEntity> findById(Long id);
 
 	// 검색 기능
 	@Query(
@@ -128,4 +127,11 @@ public interface VoteRepository extends JpaRepository<VoteEntity, Integer> {
 					+ " join OptionEntity o on o.voteId = v.id"
 					+ " where o.id = :optionId")
 	Optional<VoteEntity> findVoteByOption(Long optionId);
+
+	// 유저가 참여한 투표 찾기
+	@Query(
+			"select v from VoteEntity v"
+					+ " join DecisionEntity d on d.userId = :userId"
+					+ " join OptionEntity o on o.id = d.optionId and o.voteId = v.id")
+	List<VoteEntity> findAllParticipateListByUserId(Long userId);
 }

@@ -37,4 +37,12 @@ public class UserEntity extends BaseEntity {
 
 	@Column(name = ENTITY_PREFIX + "_password", nullable = false)
 	private String password;
+
+	public void updateEmail(String email) {
+		this.email = email;
+	}
+
+	public void updateNickName(String nickname) {
+		this.nickname = nickname;
+	}
 }

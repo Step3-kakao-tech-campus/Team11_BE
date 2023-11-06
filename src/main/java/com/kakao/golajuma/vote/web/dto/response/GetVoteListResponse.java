@@ -28,7 +28,7 @@ public class GetVoteListResponse implements AbstractResponseDto {
 		@Builder
 		@Getter
 		public static class VoteListDto {
-			long id;
+			Long id;
 			String active;
 			String title;
 		}

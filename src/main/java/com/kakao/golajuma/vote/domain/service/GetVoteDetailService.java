@@ -17,7 +17,7 @@ public class GetVoteDetailService {
 	private final VoteRepository voteJPARepository;
 	private final GetVoteService getVoteService;
 
-	public GetVoteDetailResponse getVoteDetail(long voteId, Long userId) {
+	public GetVoteDetailResponse getVoteDetail(Long voteId, Long userId) {
 		// 투표와 옵션리스트 가져오기
 		VoteEntity vote =
 				voteJPARepository

@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class CreateVoteResponse implements AbstractResponseDto {
-	private long id;
+	private Long id;
 
-	public CreateVoteResponse(long id) {
+	public CreateVoteResponse(Long id) {
 		this.id = id;
 	}
 }

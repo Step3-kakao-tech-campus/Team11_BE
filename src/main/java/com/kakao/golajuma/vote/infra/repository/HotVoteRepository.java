@@ -17,8 +17,8 @@ public interface HotVoteRepository extends JpaRepository<VoteEntity, Long> {
 					+ "WHERE d.updatedDate >= :startTime AND d.updatedDate < :endTime AND v.deleted = false "
 					+ "GROUP BY v.id "
 					+ "ORDER BY count(d.id) DESC")
-	Slice<VoteEntity> read(
-			@Param("endTime") LocalDateTime endTime,
+	Slice<VoteEntity> findByTimeLimitAndDecisionCount(
 			@Param("startTime") LocalDateTime startTime,
+			@Param("endTime") LocalDateTime endTime,
 			Pageable pageable);
 }

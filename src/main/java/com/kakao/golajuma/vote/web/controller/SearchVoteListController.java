@@ -6,6 +6,7 @@ import com.kakao.golajuma.common.support.respnose.ApiResponseBody;
 import com.kakao.golajuma.common.support.respnose.ApiResponseGenerator;
 import com.kakao.golajuma.common.support.respnose.MessageCode;
 import com.kakao.golajuma.vote.domain.service.SearchVoteListService;
+import com.kakao.golajuma.vote.web.controller.converter.GetVoteListRequestConverter;
 import com.kakao.golajuma.vote.web.dto.response.SearchVoteListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SearchVoteListController {
 
 	private final SearchVoteListService searchVoteListService;
+	private final GetVoteListRequestConverter getVoteListRequestConverter;
 
 	// 투표 검색 -> 투표 리스트 조회
 	@GetMapping("/votes/search")
@@ -28,7 +30,12 @@ public class SearchVoteListController {
 			@RequestParam(defaultValue = "current") String sort,
 			@RequestParam(defaultValue = "total") String category) {
 		SearchVoteListResponse responseDto =
-				searchVoteListService.searchVoteList(userId, page, keyword, sort, category);
+				searchVoteListService.searchVoteList(
+						userId,
+						page,
+						keyword,
+						getVoteListRequestConverter.toSort(sort),
+						getVoteListRequestConverter.toCategory(category));
 
 		return ApiResponseGenerator.success(responseDto, HttpStatus.OK, MessageCode.GET);
 	}

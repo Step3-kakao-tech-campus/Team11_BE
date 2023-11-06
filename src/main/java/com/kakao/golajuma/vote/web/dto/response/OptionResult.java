@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class OptionResult {
 	private Long id;
-	private Long optionCount;
-	private Long optionRatio;
+	private int optionCount;
+	private double optionRatio;
 }

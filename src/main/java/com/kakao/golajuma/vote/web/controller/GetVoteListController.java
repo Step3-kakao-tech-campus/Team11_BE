@@ -6,6 +6,7 @@ import com.kakao.golajuma.common.support.respnose.ApiResponseBody;
 import com.kakao.golajuma.common.support.respnose.ApiResponseGenerator;
 import com.kakao.golajuma.common.support.respnose.MessageCode;
 import com.kakao.golajuma.vote.domain.service.GetVoteListService;
+import com.kakao.golajuma.vote.web.controller.converter.GetVoteListRequestConverter;
 import com.kakao.golajuma.vote.web.dto.response.GetVoteListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GetVoteListController {
 
 	private final GetVoteListService getVoteListService;
+	private final GetVoteListRequestConverter getVoteListRequestConverter;
 
 	// 투표 조회 - 메인페이지, 완료된 페이지
 	@GetMapping("/votes")
@@ -28,8 +30,14 @@ public class GetVoteListController {
 					@RequestParam(defaultValue = "current") String sort,
 					@RequestParam(defaultValue = "continue") String active,
 					@RequestParam(defaultValue = "total") String category) {
+
 		GetVoteListResponse.MainAndFinishPage responseDto =
-				getVoteListService.getVoteList(userId, page, sort, active, category);
+				getVoteListService.getVoteList(
+						userId,
+						page,
+						getVoteListRequestConverter.toSort(sort),
+						getVoteListRequestConverter.toActive(active),
+						getVoteListRequestConverter.toCategory(category));
 
 		return ApiResponseGenerator.success(responseDto, HttpStatus.OK, MessageCode.GET);
 	}

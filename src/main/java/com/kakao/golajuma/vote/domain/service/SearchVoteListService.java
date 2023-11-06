@@ -25,7 +25,7 @@ public class SearchVoteListService {
 	static int size = 5;
 
 	public SearchVoteListResponse searchVoteList(
-			Long userId, int page, String keyword, String sort, String category) {
+			Long userId, int page, String keyword, Sort sort, Category category) {
 		this.page = page;
 
 		// 1. vote list 를 가져온다
@@ -42,15 +42,15 @@ public class SearchVoteListService {
 		return new SearchVoteListResponse(votes, isLast);
 	}
 
-	private Slice<VoteEntity> findVotes(String keyword, String category, String sort) {
+	private Slice<VoteEntity> findVotes(String keyword, Category category, Sort sort) {
 		// 카테고리 요청 확인
 		if (Category.isTotalRequest(category)) {
 			return OrderBySort(keyword, sort);
 		}
-		return ByCategoryOrderBySort(keyword, Category.findCategory(category), sort);
+		return ByCategoryOrderBySort(keyword, category, sort);
 	}
 
-	private Slice<VoteEntity> OrderBySort(String keyword, String sort) {
+	private Slice<VoteEntity> OrderBySort(String keyword, Sort sort) {
 		Pageable pageable = PageRequest.of(page, size);
 
 		if (Sort.isCurrentRequest(sort)) {
@@ -59,7 +59,7 @@ public class SearchVoteListService {
 		return voteRepository.searchVotesOrderByVoteTotalCount(keyword, pageable);
 	}
 
-	private Slice<VoteEntity> ByCategoryOrderBySort(String keyword, Category category, String sort) {
+	private Slice<VoteEntity> ByCategoryOrderBySort(String keyword, Category category, Sort sort) {
 		Pageable pageable = PageRequest.of(page, size);
 
 		if (Sort.isCurrentRequest(sort)) {

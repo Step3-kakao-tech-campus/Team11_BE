@@ -31,7 +31,7 @@ public class DecisionController {
 	@DeleteMapping("/options/{optionId}")
 	public ApiResponse<SuccessBody<DecisionResponse>> deleteVote(
 			@PathVariable Long optionId, @Login Long userId) {
-		DecisionResponse response = decisionService.deleteDecision(userId, optionId);
+		DecisionResponse response = decisionService.deleteVote(userId, optionId);
 		return ApiResponseGenerator.success(response, HttpStatus.OK, MessageCode.DELETE);
 	}
 }

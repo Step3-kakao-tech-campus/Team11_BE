@@ -28,7 +28,7 @@ public class GetVoteService {
 		// 투표의 옵션을 찾는다
 		List<OptionEntity> options = optionJPARepository.findAllByVoteId(vote.getId());
 		// 작성자 찾기
-		long writerId = vote.getUserId();
+		Long writerId = vote.getUserId();
 		UserEntity user = userRepository.findById(writerId).get();
 
 		boolean participate;
@@ -69,7 +69,7 @@ public class GetVoteService {
 		return vote.getCategory().getCategory();
 	}
 
-	private List<Boolean> checkChoiceOptions(List<OptionEntity> options, long userId) {
+	private List<Boolean> checkChoiceOptions(List<OptionEntity> options, Long userId) {
 		List<Boolean> chocieList = new ArrayList<>();
 		for (OptionEntity option : options) {
 			chocieList.add(checkChoiceOption(userId, option));
@@ -77,10 +77,9 @@ public class GetVoteService {
 		return chocieList;
 	}
 
-	private boolean checkChoiceOption(long userId, OptionEntity option) {
-		//		 decision repo 탐색
-		//		return decisionRepository.existByUserIdAndOptionId(userId, option.getId());
-		return true;
+	private boolean checkChoiceOption(Long userId, OptionEntity option) {
+		// decision repo 탐색
+		return decisionRepository.existsByUserIdAndOptionId(userId, option.getId());
 	}
 
 	private boolean checkParticipate(List<Boolean> choiceList) {

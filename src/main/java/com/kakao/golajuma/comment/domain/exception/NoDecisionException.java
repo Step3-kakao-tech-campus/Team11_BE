@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public class NoDecisionException extends BusinessException {
 
-	public NoDecisionException(String message, HttpStatus httpStatus) {
-		super(message, httpStatus);
+	public NoDecisionException(String message) {
+		super(message, HttpStatus.FORBIDDEN);
 	}
 }
