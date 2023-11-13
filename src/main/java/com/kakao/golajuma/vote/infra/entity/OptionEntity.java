@@ -25,7 +25,7 @@ public class OptionEntity extends BaseEntity {
 	@Column(name = ENTITY_PREFIX + "_vote_id", nullable = false)
 	private Long voteId;
 
-	@Column(name = ENTITY_PREFIX + "_name", nullable = false, length = 200)
+	@Column(name = ENTITY_PREFIX + "_name", nullable = false)
 	private String optionName;
 
 	@Column(name = ENTITY_PREFIX + "_image")
