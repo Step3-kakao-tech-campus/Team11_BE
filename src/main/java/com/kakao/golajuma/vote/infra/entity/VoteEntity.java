@@ -13,7 +13,9 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = VoteEntity.ENTITY_PREFIX)
+@Table(
+		name = VoteEntity.ENTITY_PREFIX,
+		indexes = @Index(name = "idx__title__content", columnList = "vote_title, vote_content"))
 public class VoteEntity extends BaseEntity {
 
 	public static final String ENTITY_PREFIX = "vote";
