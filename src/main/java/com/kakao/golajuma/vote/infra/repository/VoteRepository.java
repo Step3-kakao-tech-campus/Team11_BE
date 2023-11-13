@@ -89,36 +89,44 @@ public interface VoteRepository extends JpaRepository<VoteEntity, Integer> {
 
 	// 검색 기능
 	@Query(
-			"select v from VoteEntity v"
-					+ " where v.deleted = false"
-					+ " and v.voteTitle like %:keyword%"
-					+ " order by v.createdDate desc ")
+			value =
+					"SELECT * FROM vote v "
+							+ "WHERE v.deleted = false "
+							+ "AND match (vote_title, vote_content) AGAINST(:keyword) "
+							+ "ORDER BY v.created_date DESC ",
+			nativeQuery = true)
 	Slice<VoteEntity> searchVotesOrderByCreatedDate(
 			@Param("keyword") String keyword, Pageable pageable);
 
 	@Query(
-			"select v from VoteEntity v"
-					+ " where v.deleted = false"
-					+ " and v.voteTitle like %:keyword%"
-					+ " and v.category = :category"
-					+ " order by v.createdDate desc ")
+			value =
+					"select * from vote v"
+							+ " where v.deleted = false"
+							+ " AND match (vote_title, vote_content) AGAINST(:keyword) "
+							+ " and v.vote_category = ':category'"
+							+ " order by created_date desc ",
+			nativeQuery = true)
 	Slice<VoteEntity> searchVotesByCategoryOrderByCreatedDate(
 			@Param("keyword") String keyword, @Param("category") Category category, Pageable pageable);
 
 	@Query(
-			"select v from VoteEntity v"
-					+ " where v.deleted = false"
-					+ " and v.voteTitle like %:keyword%"
-					+ " order by v.voteTotalCount desc ")
+			value =
+					"select * from vote v"
+							+ " where v.deleted = false"
+							+ " AND match (vote_title, vote_content) AGAINST(:keyword) "
+							+ " order by v.vote_total_count desc ",
+			nativeQuery = true)
 	Slice<VoteEntity> searchVotesOrderByVoteTotalCount(
 			@Param("keyword") String keyword, Pageable pageable);
 
 	@Query(
-			"select v from VoteEntity v"
-					+ " where v.deleted = false"
-					+ " and v.voteTitle like %:keyword%"
-					+ " and v.category = :category"
-					+ " order by v.voteTotalCount desc ")
+			value =
+					"select * from vote v"
+							+ " where v.deleted = false"
+							+ " AND match (vote_title, vote_content) AGAINST(:keyword) "
+							+ " and v.vote_category = ':category'"
+							+ " order by v.vote_total_count desc ",
+			nativeQuery = true)
 	Slice<VoteEntity> searchVotesByCategoryOrderByVoteTotalCount(
 			@Param("keyword") String keyword, @Param("category") Category category, Pageable pageable);
 
