@@ -11,7 +11,6 @@ import com.kakao.golajuma.vote.infra.entity.OptionEntity;
 import com.kakao.golajuma.vote.infra.entity.VoteEntity;
 import com.kakao.golajuma.vote.infra.repository.DecisionRepository;
 import com.kakao.golajuma.vote.infra.repository.OptionRepository;
-import com.kakao.golajuma.vote.web.dto.response.OptionDto;
 import com.kakao.golajuma.vote.web.dto.response.VoteDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
